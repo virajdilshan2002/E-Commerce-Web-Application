@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
             }
 
             resp.getWriter().print("Login Success!");
-            resp.sendRedirect("pages/home.jsp?message=Login Success!&username=" + username);
+            resp.sendRedirect("pages/home.jsp?username=" + username + "&role=" + user.getRole());
         } catch (Exception e) {
             resp.getWriter().print(e.getMessage());
             throw new RuntimeException(e);
