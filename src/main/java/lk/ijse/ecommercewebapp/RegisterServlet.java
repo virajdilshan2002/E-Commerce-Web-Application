@@ -16,13 +16,20 @@ import java.io.IOException;
 public class RegisterServlet extends HttpServlet {
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("doGet");
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String name = req.getParameter("username");
         String password = req.getParameter("password");
 
         String encodedPassword = new BCryptPasswordEncoder().encode(password);
 
-        User user = new User(name, encodedPassword, "client",true);
+        User user = new User(name, encodedPassword, "user",true);
+
+        System.out.println(user);
 
         try {
             SessionFactory sessionFactory = (SessionFactory) req.getServletContext().getAttribute("sessionFactory");

@@ -38,6 +38,10 @@ public class LoginServlet extends HttpServlet {
             }
 
             resp.getWriter().print("Login Success!");
+            if (user.getRole().equals("admin")){
+                resp.sendRedirect("pages/admin.jsp?username=" + username + "&role=" + user.getRole());
+                return;
+            }
             resp.sendRedirect("pages/home.jsp?username=" + username + "&role=" + user.getRole());
         } catch (Exception e) {
             resp.getWriter().print(e.getMessage());
