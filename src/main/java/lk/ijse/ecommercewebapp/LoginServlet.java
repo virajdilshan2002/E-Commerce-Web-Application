@@ -15,17 +15,18 @@ import java.io.IOException;
 @WebServlet(name = "loginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
 
-    private String message;
+    public static User user;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
         try {
             SessionFactory sessionFactory = (SessionFactory) req.getServletContext().getAttribute("sessionFactory");
             Session session = sessionFactory.openSession();
-            User user = session.get(User.class, username);
+            user = session.get(User.class, username);
 
             if (user == null){
                 resp.getWriter().print("User is null!");
@@ -39,10 +40,10 @@ public class LoginServlet extends HttpServlet {
 
             resp.getWriter().print("Login Success!");
             if (user.getRole().equals("admin")){
-                resp.sendRedirect("pages/admin.jsp?username=" + username + "&role=" + user.getRole());
+                resp.sendRedirect("pages/admin.jsp?");
                 return;
             }
-            resp.sendRedirect("pages/home.jsp?username=" + username + "&role=" + user.getRole());
+            resp.sendRedirect("pages/home.jsp?");
         } catch (Exception e) {
             resp.getWriter().print(e.getMessage());
             throw new RuntimeException(e);

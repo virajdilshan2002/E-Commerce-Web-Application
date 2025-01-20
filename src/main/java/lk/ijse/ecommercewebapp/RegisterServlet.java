@@ -12,12 +12,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.IOException;
 
-@WebServlet(name = "registerServlet", value = "/register")
+@WebServlet(name = "registerServlet", value = "/pages/register")
 public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("doGet");
+
     }
 
     @Override

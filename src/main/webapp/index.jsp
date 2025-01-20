@@ -46,6 +46,5 @@
         <p>Don't have an account? <a href="pages/register.jsp">Register</a></p>
     </div>
 </div>
-<script></script>
 </body>
 </html>
