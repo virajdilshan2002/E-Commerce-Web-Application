@@ -32,7 +32,7 @@
 %>
 <div class="container text-center my-5">
     <h1>Welcome to the POS System</h1>
-    <h5><%=user.getRole()%> : <%=user.getUsername()%></h5>
+    <h5><%=user.getRole()%> : <%=user.getUserName()%></h5>
     <p>Browse, shop, and manage your orders with ease.</p>
 </div>
 <%

@@ -107,7 +107,7 @@
                         </div>
 
                         <!-- Category -->
-                        <div class="w-50">
+                        <div class="w-50 ms-2">
                             <label for="productCategory" class="form-label">Category</label>
                             <select class="form-select" id="productCategory" name="productCategory" required>
                                 <option selected disabled>Select category</option>

@@ -34,7 +34,7 @@
 %>
 <div class="container text-center my-5">
     <h1>Welcome to the POS System</h1>
-    <h5><%=user.getRole()%> : <%=user.getUsername()%></h5>
+    <h5><%=user.getRole()%> : <%=user.getUserName()%></h5>
     <p>Browse, shop, and manage your orders with ease.</p>
 </div>
 <%
@@ -61,13 +61,12 @@
 
     <%
         List<Product> productList = (List<Product>) request.getAttribute("productList");
-        if (!productList.isEmpty()) {
+        if (productList != null) {
     %>
     <h2 class="mb-4">Furniture</h2>
     <div id="category-1" class="row">
         <%
             for (Product product : productList) {
-                System.out.println(product);
         %>
         <!-- Product Card -->
         <form class="col-md-4 mb-4" action="cart" method="post">
@@ -79,14 +78,41 @@
                     <p class="card-text"><%=product.getPrice()%></p>
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text">Quantity</span>
-                        <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="1" min="1" max="<%=product.getQuantity()%>">
+                        <input type="number" name="qty" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="1" min="1" max="<%=product.getQuantity()%>">
                         <button type="submit" class="btn btn-success">Add to Cart</button>
                     </div>
                 </div>
             </div>
+            <!-- Hidden inputs to send additional product data -->
+            <input type="hidden" name="productId" value="<%=product.getId()%>">
         </form>
         <%
                 }
+            }
+        %>
+
+        <%
+            String alert = request.getParameter("alert");
+            if (alert != null) {
+        %>
+        <!-- Bootstrap Modal -->
+        <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="alertModalLabel">Alert</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <%= alert %>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%
             }
         %>
     </div>
