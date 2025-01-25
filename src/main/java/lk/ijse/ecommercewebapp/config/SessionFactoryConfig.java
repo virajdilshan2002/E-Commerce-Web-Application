@@ -5,10 +5,7 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
-import lk.ijse.ecommercewebapp.entity.Cart;
-import lk.ijse.ecommercewebapp.entity.Category;
-import lk.ijse.ecommercewebapp.entity.Product;
-import lk.ijse.ecommercewebapp.entity.User;
+import lk.ijse.ecommercewebapp.entity.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -22,6 +19,8 @@ public class SessionFactoryConfig implements ServletContextListener {
                 .addAnnotatedClass(Product.class)
                 .addAnnotatedClass(Category.class)
                 .addAnnotatedClass(Cart.class)
+                .addAnnotatedClass(Order.class)
+                .addAnnotatedClass(OrderDetail.class)
                 .buildSessionFactory();
 
         System.out.println("Session Factory is created");

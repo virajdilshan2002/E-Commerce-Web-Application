@@ -24,10 +24,11 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String name = req.getParameter("username");
         String password = req.getParameter("password");
+        String role = req.getParameter("role");
 
         String encodedPassword = new BCryptPasswordEncoder().encode(password);
 
-        User user = new User(name, encodedPassword, "user",true);
+        User user = new User(name, encodedPassword, role,true);
 
         System.out.println(user);
 
@@ -39,10 +40,16 @@ public class RegisterServlet extends HttpServlet {
             session.getTransaction().commit();
             session.close();
 
-            resp.sendRedirect("register.jsp?message=Registration Successful!");
+            if (role.equals("ADMIN")) {
+                resp.sendRedirect("admin.jsp?alert=Admin Registration Successful!");
+                resp.setStatus(HttpServletResponse.SC_OK);
+                return;
+            }
+
+            resp.sendRedirect("../index.jsp?alert=Registration Successful!");
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
-            resp.sendRedirect("register.jsp?message=Registration Failed!");
+            resp.sendRedirect("register.jsp?alert=Registration Failed! Try Again.");
             resp.getWriter().println(e.getMessage());
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             e.printStackTrace();

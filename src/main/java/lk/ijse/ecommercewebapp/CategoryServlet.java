@@ -10,14 +10,17 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "CategoryServlet", value = "/pages/category")
+@WebServlet(name = "CategoryServlet", value = "/pages/category" )
 public class CategoryServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
         try {
             SessionFactory sessionFactory = (SessionFactory) req.getServletContext().getAttribute("sessionFactory");
             Session session = sessionFactory.openSession();
@@ -25,13 +28,19 @@ public class CategoryServlet extends HttpServlet {
             session.close();
 
             if (categoryList.isEmpty()) {
-                resp.sendRedirect("admin.jsp");
+                resp.getWriter().print("[]");
                 return;
             }
 
-            req.setAttribute("categoryList", categoryList);
-            req.getRequestDispatcher("admin.jsp").forward(req, resp);
-
+            JsonArrayBuilder categoryBuilder = Json.createArrayBuilder();
+            for (Category category : categoryList) {
+                categoryBuilder.add(Json.createObjectBuilder()
+                        .add("id", category.getId())
+                        .add("name", category.getName())
+                        .build()
+                );
+            }
+            resp.getWriter().print(categoryBuilder.build());
         } catch (HibernateException e) {
             throw new RuntimeException(e);
         }

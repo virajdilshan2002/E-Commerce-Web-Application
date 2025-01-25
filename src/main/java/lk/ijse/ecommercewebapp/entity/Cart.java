@@ -3,8 +3,10 @@ package lk.ijse.ecommercewebapp.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,6 +16,7 @@ import javax.persistence.*;
 @Table(name = "cart")
 public class Cart {
     @Id
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id")
     private Long id;
@@ -30,5 +33,5 @@ public class Cart {
     private int qty;
 
     @Column(name = "total")
-    private double total;
+    private BigDecimal total;
 }

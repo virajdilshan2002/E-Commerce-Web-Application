@@ -14,8 +14,7 @@ import java.io.IOException;
 
 @WebServlet(name = "loginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
-
-    public static User user;
+    public static User user = null;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,22 +27,25 @@ public class LoginServlet extends HttpServlet {
             Session session = sessionFactory.openSession();
             user = session.get(User.class, username);
 
+            req.getServletContext().setAttribute("user", user);
+
             if (user == null){
                 resp.getWriter().print("User is null!");
-                resp.sendRedirect("index.jsp?message=Couldn't Find User! Please Register!");
+                resp.sendRedirect("index.jsp?alert=Couldn't Find User! Please Register!");
                 return;
             } else if (!new BCryptPasswordEncoder().matches(password, user.getPassword())){
                 resp.getWriter().print("Invalid username or password!");
-                resp.sendRedirect("index.jsp?message=Invalid username or password!");
+                resp.sendRedirect("index.jsp?alert=Invalid username or password!");
                 return;
             }
 
             resp.getWriter().print("Login Success!");
-            if (user.getRole().equals("admin")){
-                resp.sendRedirect("pages/admin.jsp?");
+            if (user.getRole().equals("ADMIN")){
+                resp.sendRedirect("pages/admin");
                 return;
             }
-            resp.sendRedirect("pages/home.jsp?");
+//            req.getRequestDispatcher("pages/products").forward(req, resp);
+            resp.sendRedirect("pages/products");
         } catch (Exception e) {
             resp.getWriter().print(e.getMessage());
             throw new RuntimeException(e);

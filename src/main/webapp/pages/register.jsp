@@ -4,10 +4,30 @@
 <head>
     <title>JSP - Hello World</title>
     <link rel="stylesheet" href="../assets/framework/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/framework/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../assets/framework/jquery/jquery-3.7.1.min.js"></script>
 </head>
-<body class="d-flex flex-column justify-content-center align-items-center min-vh-100" style="width: 100%">
+<body class="d-flex flex-column justify-content-center align-items-center min-vh-100 w-100 backgroundStrips" style="width: 100%">
+<%
+    String alert = request.getParameter("alert");
+    if (alert != null) {
+%>
+<div class="toast position-absolute end-0 bottom-0" role="alert" aria-live="assertive" aria-atomic="true" >
+    <div class="toast-header">
+        <img src="../assets/images/icon/alert.gif" class="rounded me-2" alt="alert">
+        <strong class="me-auto"><%=alert%></strong>
+        <small class="text-body-secondary">Just now</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+        <%= alert %>
+    </div>
+</div>
+<%
+    }
+%>
+
 <!-- Heading -->
 <h1>Register Here!</h1>
 
@@ -35,6 +55,7 @@
         </div>
         <!-- Submit Button -->
         <div class="d-grid">
+            <input type="hidden" name="role" value="USER">
             <button id="register-button" type="submit" class="btn btn-primary">Register</button>
         </div>
     </form>
@@ -43,14 +64,13 @@
         <p>Already have an account? <a href="../index.jsp">Login</a></p>
     </div>
 
-    <%
-        String message = request.getParameter("message");
-        if (message != null) {
+ <%--   <%
+        if (alert != null) {
     %>
-    <h2 class="text-center text-danger"><%= message %></h2>
+    <h2 class="text-center text-danger"><%= alert %></h2>
     <%
         }
-    %>
+    %>--%>
 </div>
 
 <script>
@@ -65,12 +85,10 @@
             } else {
                 $('#password-error').hide();  // Hide error message
             }
-
-            console.log('Password:', password);
-            console.log('Confirm Password:', confirmPassword);
         });
     });
 </script>
+<script src="../assets/js/AlertToast.js"></script>
 
 </body>
 </html>

@@ -9,12 +9,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import lk.ijse.ecommercewebapp.entity.Category;
 import lk.ijse.ecommercewebapp.entity.Product;
+import lk.ijse.ecommercewebapp.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
@@ -38,6 +43,22 @@ public class ProductServlet extends HttpServlet {
 
             if (productList.isEmpty()) {
                 resp.sendRedirect("products.jsp");
+                return;
+            }
+
+            // Check if the request is for JSON
+            String isAjaxRequest = req.getParameter("ajax");
+            if ("true".equalsIgnoreCase(isAjaxRequest)) {
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+
+                String type = req.getParameter("type");
+                if (type.equals("count")){
+                    JsonObjectBuilder obj = Json.createObjectBuilder();
+                    obj.add("count", productList.size());
+                    resp.getWriter().write(obj.build().toString());
+                    return;
+                }
                 return;
             }
 
@@ -79,7 +100,7 @@ public class ProductServlet extends HttpServlet {
             Product product = new Product();
             product.setName(name);
             product.setDescription(description);
-            product.setPrice(Double.parseDouble(price));
+            product.setPrice(BigDecimal.valueOf(Double.parseDouble(price)));
             product.setQuantity(Integer.parseInt(quantity));
             product.setImageUrl("assets/images/" + imageFileName);
 

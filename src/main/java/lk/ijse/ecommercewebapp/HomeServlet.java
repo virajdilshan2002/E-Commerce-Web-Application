@@ -15,10 +15,4 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.sendRedirect("pages/home.jsp");
     }
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    }
-
-    public void destroy() {
-    }
 }

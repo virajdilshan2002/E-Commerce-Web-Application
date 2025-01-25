@@ -18,10 +18,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="products">Products</a></li>
-                    <li class="nav-item"><a class="nav-link" href="cart.jsp">Cart</a></li>
-                    <li class="nav-item"><a class="nav-link" href="orders.jsp">Orders</a></li>
-                    <li class="nav-item"><a class="nav-link" href="profile.jsp">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../index.jsp">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link" href="cart">Cart</a></li>
+                    <li class="nav-item"><a class="nav-link" href="orders">Orders</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link text-bg-danger rounded" href="logout">Logout</a></li>
                 </ul>
             </div>
         </div>
