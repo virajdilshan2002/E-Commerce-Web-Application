@@ -4,10 +4,11 @@
 <%@ page import="java.sql.Time" %>
 <%@ page import="java.sql.Timestamp" %>
 <%@ page import="lk.ijse.ecommercewebapp.entity.Product" %>
+<%@ page import="lk.ijse.ecommercewebapp.entity.Category" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Admin</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="../assets/framework/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/framework/bootstrap/bootstrap.bundle.min.js"></script>
@@ -17,16 +18,13 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">KumuduFurniture</a>
+            <a class="navbar-brand" href="admin">KumuduFurniture</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <%--<li class="nav-item"><a class="nav-link" href="users.jsp">Users</a></li>
-                    <li class="nav-item"><a class="nav-link" href="orders.jsp">Orders</a></li>
-                    <li class="nav-item"><a class="nav-link" href="profile.jsp">Profile</a></li>--%>
-                    <li class="nav-item"><a class="nav-link text-bg-danger rounded" href="logout">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link text-bg-danger rounded-5 ps-3 pe-3 text-center" href="logout">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -37,7 +35,7 @@
     String alert = request.getParameter("alert");
     if (alert != null) {
 %>
-<div class="toast position-absolute end-0 bottom-0" role="alert" aria-live="assertive" aria-atomic="true">
+<div class="toast position-absolute end-0 bottom-0 z-3" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header">
         <img src="../assets/images/icon/alert.gif" class="rounded me-2" alt="alert">
         <strong class="me-auto"><%=alert%>
@@ -167,11 +165,16 @@
                             <label for="productCategory" class="form-label">Category</label>
                             <select class="form-select" id="productCategory" name="productCategory" required>
                                 <option disabled selected>Select Category</option>
-                                <option value="1">Dining Tables</option>
-                                <option value="2">Dining Chair</option>
-                                <option value="3">Double Bed</option>
-                                <option value="4">Single Bed</option>
-                                <option value="5">Chair</option>
+                                <%
+                                    List<Category> categoryList = (List<Category>) request.getAttribute("catList");
+                                    if (categoryList != null) {
+                                        for (Category category : categoryList) {
+                                %>
+                                <option value="<%=category.getId()%>"><%=category.getName()%></option>
+                                <%
+                                        }
+                                    }
+                                %>
                             </select>
                         </div>
                     </div>
@@ -185,7 +188,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button id="btnSaveProduct" type="submit" class="btn btn-primary" name="action" value="post">Save Product</button>
+                    <button id="btnSaveProduct" type="submit" class="btn btn-primary" name="action" value="post">Save
+                        Product
+                    </button>
                 </div>
             </form>
         </div>
@@ -238,13 +243,13 @@
     List<Product> productList = (List<Product>) request.getAttribute("productList");
     if (productList != null) {
 %>
-<h2 class="mb-4 ms-1">Furniture</h2>
-<div id="category-1" class="row mt-2 ms-1">
+<h2 class="mb-4 ms-2">Furniture</h2>
+<div id="category-1" class="row m-2">
         <%
             for (Product product : productList) {
         %>
-            <!-- Product Card -->
-            <form class="col-md-4 mb-4" action="cart" method="post" style="max-width: 300px">
+    <!-- Product Card -->
+    <div class="col-md-4 mb-4" style="max-height: 500px; max-width: 350px">
         <div class="card">
             <img src="../<%=product.getImageUrl()%>" class="card-img-top object-fit-cover" alt="Product Image"
                  style="max-height: 200px">
@@ -254,40 +259,17 @@
                 <p class="card-text"><%=product.getDescription()%>
                 </p>
                 <p class="card-text"><%=product.getPrice()%>
-                </p>
-                <div class="input-group input-group-sm mb-3">
+                <p class="card-text">Available | <%=product.getQuantity()%></p>
+                <form class="input-group input-group-sm mb-3" action="products" method="post">
                     <span class="input-group-text">Qty</span>
                     <input type="hidden" name="productId" value="<%=product.getId()%>">
-                    <form action="product" method="post">
-                        <input type="number" name="qty" class="form-control" aria-label="Sizing example input"
-                               aria-describedby="inputGroup-sizing-sm" value="1" min="1">
-                        <button type="submit" class="btn btn-success" name="action" value="put">Update Qty</button>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#productDeleteModal">Delete</button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="productDeleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Warning : Confirm?</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        You are going to delete <%=product.getName()%>. Are you sure?
-                                    </div>
-                                    <form class="modal-footer" action="product" method="post">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary" name="action" value="delete">Understood</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    <input type="number" name="qty" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-sm" value="1" min="1">
+                    <button type="submit" class="btn btn-success" name="action" value="put">Add Qty</button>
+                </form>
             </div>
         </div>
-        <!-- Hidden inputs to send additional product data -->
-        <input type="hidden" name="productId" value="<%=product.getId()%>">
-    </form>
+    </div>
         <%
                 }
             }

@@ -54,8 +54,6 @@ public class CategoryServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String categoryName = req.getParameter("categoryName");
 
-        System.out.println("categoryName = " + categoryName);
-
         try {
             Category category = new Category();
             category.setName(categoryName);
@@ -67,9 +65,9 @@ public class CategoryServlet extends HttpServlet {
             session.getTransaction().commit();
             session.close();
 
-            resp.sendRedirect("admin.jsp?status=success&alert=Category Saved Successfully!");
+            resp.sendRedirect("admin?alert=Category Saved Successfully!");
         } catch (HibernateException e) {
-            resp.sendRedirect("admin.jsp?status=failed&alert=Category Not Saved!");
+            resp.sendRedirect("admin?error=Category Not Saved!");
             throw new RuntimeException(e);
         }
     }

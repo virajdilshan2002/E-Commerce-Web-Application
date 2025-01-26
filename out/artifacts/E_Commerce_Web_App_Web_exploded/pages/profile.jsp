@@ -11,7 +11,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="home">E-Commerce WebApp</a>
+            <a class="navbar-brand" href="#">E-Commerce WebApp</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -20,8 +20,7 @@
                     <li class="nav-item"><a class="nav-link" href="products">Products</a></li>
                     <li class="nav-item"><a class="nav-link" href="cart">Cart</a></li>
                     <li class="nav-item"><a class="nav-link" href="orders">Orders</a></li>
-<%--                    <li class="nav-item"><a class="nav-link" href="profile">Profile</a></li>--%>
-                    <li class="nav-item"><a class="nav-link text-bg-danger rounded" href="logout">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link text-bg-danger rounded-5 ps-3 pe-3 text-center" href="logout">Logout</a></li>
                 </ul>
             </div>
         </div>

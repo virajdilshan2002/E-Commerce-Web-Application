@@ -10,6 +10,7 @@ import jakarta.servlet.http.Part;
 import lk.ijse.ecommercewebapp.entity.Category;
 import lk.ijse.ecommercewebapp.entity.Product;
 import lk.ijse.ecommercewebapp.entity.User;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -73,11 +74,16 @@ public class ProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
+            User user = (User) req.getServletContext().getAttribute("user");
+            if (user == null) {
+                resp.sendRedirect("logout?alert=Please login first!");
+                return;
+            }
+
             String action = req.getParameter("action");
             if (action.equals("put")){
                 doPut(req, resp);
-            } else if (action.equals("delete")) {
-                doDelete(req, resp);
+                return;
             }
 
             String name = req.getParameter("name");
@@ -94,7 +100,7 @@ public class ProductServlet extends HttpServlet {
 
             if (!uploadDirectory.exists()) {
                 if (!uploadDirectory.mkdirs()) {
-                    resp.sendRedirect("admin.jsp?sysError=Something wrong in our end!");
+                    resp.sendRedirect("admin?sysError=Something wrong in our end!");
                     return;
                 }
             }
@@ -121,20 +127,31 @@ public class ProductServlet extends HttpServlet {
             session.getTransaction().commit();
             session.close();
 
-            resp.sendRedirect("admin.jsp?status=success&alert=Product Saved Successfully!");
+            resp.sendRedirect("admin?alert=Product Saved Successfully!");
         } catch (Exception e) {
-            resp.sendRedirect("admin.jsp?status=failed&alert=Product Not Saved!");
+            resp.sendRedirect("admin?alert=Product Not Saved!");
             e.printStackTrace();
         }
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(req, resp);
+        try {
+            String productId = req.getParameter("productId");
+            String qty = req.getParameter("qty");
+            SessionFactory sessionFactory = (SessionFactory) req.getServletContext().getAttribute("sessionFactory");
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            Product product = session.get(Product.class, Long.parseLong(productId));
+            product.setQuantity(product.getQuantity() + Integer.parseInt(qty));
+            session.update(product);
+            session.getTransaction().commit();
+            session.close();
+            resp.sendRedirect("admin?alert=Qty Added Successfully!");
+        } catch (HibernateException e) {
+            resp.sendRedirect("admin?alert=Qty Not Added!");
+            throw new RuntimeException(e);
+        }
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doDelete(req, resp);
-    }
 }

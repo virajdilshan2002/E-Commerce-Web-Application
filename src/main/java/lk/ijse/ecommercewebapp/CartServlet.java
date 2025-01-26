@@ -13,8 +13,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +25,17 @@ public class CartServlet extends HttpServlet {
         try {
             User user = (User) req.getServletContext().getAttribute("user");
             if (user == null) {
-                resp.sendRedirect("logout?alert=Please login to view cart!");
+                resp.sendRedirect("logout?alert=Please login first!");
                 return;
             }
 
+            String error = req.getParameter("error");
             String alert = req.getParameter("alert");
-            req.setAttribute("alert", alert);
+
+            if (error != null) {
+                resp.sendRedirect("cart?alert=" + error);
+                return;
+            }
 
             SessionFactory sessionFactory = (SessionFactory) req.getServletContext().getAttribute("sessionFactory");
             Session session = sessionFactory.openSession();
@@ -41,26 +44,23 @@ public class CartServlet extends HttpServlet {
                     .list();
             session.close();
 
-            if (cartList.isEmpty()) {
-                req.getRequestDispatcher("cart.jsp").forward(req, resp);
-                return;
-            }
-
             List<CartTableModal> tableModalList = new ArrayList<>();
-            for (Cart cart : cartList) {
-                CartTableModal cartTm = new CartTableModal(
-                        cart.getId(),
-                        cart.getProduct(),
-                        cart.getProduct().getPrice(),
-                        cart.getQty(),
-                        cart.getTotal()
-                );
+            if (!cartList.isEmpty()) {
+                for (Cart cart : cartList) {
+                    CartTableModal cartTm = new CartTableModal(
+                            cart.getId(),
+                            cart.getProduct(),
+                            cart.getProduct().getPrice(),
+                            cart.getQty(),
+                            cart.getTotal()
+                    );
 
-                tableModalList.add(cartTm);
+                    tableModalList.add(cartTm);
+                }
             }
 
             req.setAttribute("cartList", tableModalList);
-            req.getRequestDispatcher("cart.jsp").forward(req, resp);
+            req.getRequestDispatcher("cart.jsp?alert=" + alert).forward(req, resp);
 
         } catch (HibernateException e) {
             throw new RuntimeException(e);
@@ -71,7 +71,7 @@ public class CartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getServletContext().getAttribute("user");
         if (user == null) {
-            resp.sendRedirect("logout?alert=Please login to view cart!");
+            resp.sendRedirect("logout?alert=Please login first!");
             return;
         }
 

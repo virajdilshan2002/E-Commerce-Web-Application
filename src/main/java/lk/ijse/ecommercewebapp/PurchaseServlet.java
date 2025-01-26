@@ -83,13 +83,13 @@ public class PurchaseServlet extends HttpServlet {
             } catch (Exception e) {
                 transaction.rollback();
                 session.close();
-                resp.sendRedirect("cart?alert=Order Not Placed!");
+                resp.sendRedirect("cart?error=Order Not Placed!");
                 throw new RuntimeException(e);
             }
             session.close();
             resp.sendRedirect("cart?alert=Order Placed Successfully!");
         } catch (Exception e) {
-            resp.sendRedirect("cart?alert=Order Not Placed!");
+            resp.sendRedirect("cart?error=Order Not Placed!");
             throw new RuntimeException(e);
         }
     }

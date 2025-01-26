@@ -19,12 +19,13 @@ public class OrderServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = (User) req.getServletContext().getAttribute("user");
-        if (user == null) {
-            resp.sendRedirect("logout?alert=Please login to view cart!");
-            return;
-        }
         try {
+            User user = (User) req.getServletContext().getAttribute("user");
+            if (user == null) {
+                resp.sendRedirect("logout?alert=Please login first!");
+                return;
+            }
+
             SessionFactory sessionFactory = (SessionFactory) req.getServletContext().getAttribute("sessionFactory");
             Session session = sessionFactory.openSession();
             List<Order> orderList = session.createQuery("FROM Order WHERE user = :user", Order.class)

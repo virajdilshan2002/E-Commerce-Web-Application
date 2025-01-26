@@ -2,18 +2,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <title>Register Here!</title>
     <link rel="stylesheet" href="../assets/framework/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/framework/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../assets/framework/jquery/jquery-3.7.1.min.js"></script>
 </head>
-<body class="d-flex flex-column justify-content-center align-items-center min-vh-100 w-100 backgroundStrips" style="width: 100%">
+<body class="d-flex flex-column justify-content-center align-items-center min-vh-100 w-100 backgroundConstellation" style="width: 100%">
 <%
     String alert = request.getParameter("alert");
     if (alert != null) {
 %>
-<div class="toast position-absolute end-0 bottom-0" role="alert" aria-live="assertive" aria-atomic="true" >
+<div class="toast position-absolute end-0 bottom-0 z-3" role="alert" aria-live="assertive" aria-atomic="true" >
     <div class="toast-header">
         <img src="../assets/images/icon/alert.gif" class="rounded me-2" alt="alert">
         <strong class="me-auto"><%=alert%></strong>

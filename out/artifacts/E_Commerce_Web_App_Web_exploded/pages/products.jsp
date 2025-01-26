@@ -4,7 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>HOME</title>
+    <title>Products</title>
     <link rel="stylesheet" href="../assets/framework/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/framework/bootstrap/bootstrap.bundle.min.js"></script>
@@ -14,7 +14,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">KumuduFurniture</a>
+            <a class="navbar-brand" href="products">KumuduFurniture</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -23,8 +23,7 @@
                     <li class="nav-item"><a class="nav-link" href="products">Products</a></li>
                     <li class="nav-item"><a class="nav-link" href="cart">Cart</a></li>
                     <li class="nav-item"><a class="nav-link" href="orders">Orders</a></li>
-                    <%--                    <li class="nav-item"><a class="nav-link" href="profile">Profile</a></li>--%>
-                    <li class="nav-item"><a class="nav-link text-bg-danger rounded" href="logout">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link text-bg-danger rounded-5 ps-3 pe-3 text-center" href="logout">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -34,7 +33,7 @@
     String alert = request.getParameter("alert");
     if (alert != null) {
 %>
-<div class="toast position-absolute end-0 bottom-0" role="alert" aria-live="assertive" aria-atomic="true">
+<div class="toast position-absolute end-0 bottom-0 z-3" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header">
         <img src="../assets/images/icon/alert.gif" class="rounded me-2" alt="alert">
         <strong class="me-auto"><%=alert%>
@@ -69,13 +68,6 @@
 <section id="products" class="container my-5">
     <h2 class="mb-4">Products</h2>
 
-    <%--category navi buttons
-    <div class="d-grid gap-2 d-md-block">
-        <a class="btn btn-primary" href="#cat1">Button1</a>
-        <a class="btn btn-primary" href="#cat2" >Button2</a>
-        <a class="btn btn-primary" href="#cat3" >Button3</a>
-    </div>--%>
-
     <!-- Search Bar -->
     <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="Search by name" id="search-bar">
@@ -86,8 +78,8 @@
         List<Product> productList = (List<Product>) request.getAttribute("productList");
         if (productList != null) {
     %>
-    <h2 class="mb-4">Furniture</h2>
-    <div id="category-1" class="row">
+    <h2 class="mb-4">Furniture Items</h2>
+    <div class="row">
         <%
             for (Product product : productList) {
         %>
@@ -101,8 +93,9 @@
                     </h5>
                     <p class="card-text"><%=product.getDescription()%>
                     </p>
-                    <p class="card-text"><%=product.getPrice()%>
+                    <p class="card-text">Rs | <%=product.getPrice()%>
                     </p>
+                    <p class="card-text">Available | <%=product.getQuantity()%></p>
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text">Quantity</span>
                         <%

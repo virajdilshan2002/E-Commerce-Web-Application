@@ -41,7 +41,7 @@ public class RegisterServlet extends HttpServlet {
             session.close();
 
             if (role.equals("ADMIN")) {
-                resp.sendRedirect("admin.jsp?alert=Admin Registration Successful!");
+                resp.sendRedirect("admin?alert=Admin Registration Successful!");
                 resp.setStatus(HttpServletResponse.SC_OK);
                 return;
             }
@@ -49,7 +49,7 @@ public class RegisterServlet extends HttpServlet {
             resp.sendRedirect("../index.jsp?alert=Registration Successful!");
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
-            resp.sendRedirect("register.jsp?alert=Registration Failed! Try Again.");
+            resp.sendRedirect("../index.jsp?alert=Registration Failed! Try Again.");
             resp.getWriter().println(e.getMessage());
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             e.printStackTrace();

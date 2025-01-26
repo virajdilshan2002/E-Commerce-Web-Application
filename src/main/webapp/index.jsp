@@ -2,18 +2,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kumudu Furniture</title>
+    <title>KumuduFurniture | Login</title>
     <link rel="stylesheet" href="assets/framework/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="assets/framework/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="assets/framework/jquery/jquery-3.7.1.min.js"></script>
 </head>
-<body class="d-flex flex-column justify-content-center align-items-center w-100 min-vh-100 backgroundStrips" style="width: 100%">
+<body class="d-flex flex-column justify-content-center align-items-center w-100 min-vh-100 backgroundConstellation" style="width: 100%">
 <%
     String alert = request.getParameter("alert");
     if (alert != null) {
 %>
-<div class="toast position-absolute end-0 bottom-0" role="alert" aria-live="assertive" aria-atomic="true" >
+<div class="toast position-absolute end-0 bottom-0 z-3" role="alert" aria-live="assertive" aria-atomic="true" >
     <div class="toast-header">
         <img src="assets/images/icon/alert.gif" class="rounded me-2" alt="alert">
         <strong class="me-auto"><%=alert%></strong>
@@ -28,8 +28,14 @@
     }
 %>
 
-<!-- Heading -->
-<h1>Welcome to Kumudu Furniture!</h1>
+<div class="container my-5">
+    <div class="d-flex align-items-center justify-content-center">
+        <!-- Logo -->
+        <img src="./assets/images/icon/logo.webp" alt="Kumudu Furniture Logo" class="me-3 rounded-circle" style="max-width: 50px; max-height: 50px">
+        <!-- Heading -->
+        <h1 class="fw-bold mb-0">Welcome to Kumudu Furniture!</h1>
+    </div>
+</div>
 
 <div class="vw-100 p-4 mt-4 bg-body-secondary rounded-2" style="max-width: 400px">
     <h2 class="text-center mb-4">Login</h2>
