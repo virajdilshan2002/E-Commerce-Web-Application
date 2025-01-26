@@ -3,6 +3,7 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.sql.Time" %>
 <%@ page import="java.sql.Timestamp" %>
+<%@ page import="lk.ijse.ecommercewebapp.entity.Product" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -32,15 +33,15 @@
     </nav>
 </header>
 
-
 <%
     String alert = request.getParameter("alert");
     if (alert != null) {
 %>
-<div class="toast position-absolute end-0 bottom-0" role="alert" aria-live="assertive" aria-atomic="true" >
+<div class="toast position-absolute end-0 bottom-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header">
         <img src="../assets/images/icon/alert.gif" class="rounded me-2" alt="alert">
-        <strong class="me-auto"><%=alert%></strong>
+        <strong class="me-auto"><%=alert%>
+        </strong>
         <small class="text-body-secondary">Just now</small>
         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
@@ -51,7 +52,6 @@
 <%
     }
 %>
-
 
 <%--add category, product, admin buttons--%>
 <div class="d-flex flex-row w-100 justify-content-center column-gap-1 p-2 mt-2 mb-2">
@@ -167,11 +167,11 @@
                             <label for="productCategory" class="form-label">Category</label>
                             <select class="form-select" id="productCategory" name="productCategory" required>
                                 <option disabled selected>Select Category</option>
-                                <option value="1" >Dining Tables</option>
-                                <option value="2" >Dining Chair</option>
-                                <option value="3" >Double Bed</option>
-                                <option value="4" >Single Bed</option>
-                                <option value="5" >Chair</option>
+                                <option value="1">Dining Tables</option>
+                                <option value="2">Dining Chair</option>
+                                <option value="3">Double Bed</option>
+                                <option value="4">Single Bed</option>
+                                <option value="5">Chair</option>
                             </select>
                         </div>
                     </div>
@@ -185,7 +185,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button id="btnSaveProduct" type="submit" class="btn btn-primary">Save Product</button>
+                    <button id="btnSaveProduct" type="submit" class="btn btn-primary" name="action" value="post">Save Product</button>
                 </div>
             </form>
         </div>
@@ -234,105 +234,170 @@
     </div>
 </div>
 
-
-<script>
-    $(document).ready(function () {
-        $('#btnRegAdmin').click(function (e) {
-            const password = $('#password').val();
-            const confirmPassword = $('#confirm-password').val();
-
-            if (password !== confirmPassword) {
-                e.preventDefault();
-                $('#password-error').show();
-            } else {
-                $('#password-error').hide();
+<%
+    List<Product> productList = (List<Product>) request.getAttribute("productList");
+    if (productList != null) {
+%>
+<h2 class="mb-4 ms-1">Furniture</h2>
+<div id="category-1" class="row mt-2 ms-1">
+        <%
+            for (Product product : productList) {
+        %>
+            <!-- Product Card -->
+            <form class="col-md-4 mb-4" action="cart" method="post" style="max-width: 300px">
+        <div class="card">
+            <img src="../<%=product.getImageUrl()%>" class="card-img-top object-fit-cover" alt="Product Image"
+                 style="max-height: 200px">
+            <div class="card-body">
+                <h5 class="card-title"><%=product.getName()%>
+                </h5>
+                <p class="card-text"><%=product.getDescription()%>
+                </p>
+                <p class="card-text"><%=product.getPrice()%>
+                </p>
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text">Qty</span>
+                    <input type="hidden" name="productId" value="<%=product.getId()%>">
+                    <form action="product" method="post">
+                        <input type="number" name="qty" class="form-control" aria-label="Sizing example input"
+                               aria-describedby="inputGroup-sizing-sm" value="1" min="1">
+                        <button type="submit" class="btn btn-success" name="action" value="put">Update Qty</button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#productDeleteModal">Delete</button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="productDeleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Warning : Confirm?</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        You are going to delete <%=product.getName()%>. Are you sure?
+                                    </div>
+                                    <form class="modal-footer" action="product" method="post">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary" name="action" value="delete">Understood</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Hidden inputs to send additional product data -->
+        <input type="hidden" name="productId" value="<%=product.getId()%>">
+    </form>
+        <%
+                }
             }
-        });
+        %>
 
-        function getUsersCount() {
-            $.ajax({
-                url: "user",
-                type: "GET",
-                data: {ajax: "true", type: "count"},
-                success: (res) => {
-                    $('#userCount').text(res.count); // Update user count
-                    $(".updateTime").text(new Date().toLocaleTimeString()); // Update time
-                },
-                error: (err) => {
-                    $('#userCount').text('Error While Fetching Data');
-                    $(".updateTime").text(new Date().toLocaleTimeString());
-                    console.log(err);
+    <script>
+        $(document).ready(function () {
+            $('#btnRegAdmin').click(function (e) {
+                const password = $('#password').val();
+                const confirmPassword = $('#confirm-password').val();
+
+                if (password !== confirmPassword) {
+                    e.preventDefault();
+                    $('#password-error').show();
+                } else {
+                    $('#password-error').hide();
                 }
             });
 
-        }
-
-        function getProductsCount() {
-            $.ajax({
-                url: "products",
-                type: "GET",
-                data: {ajax: "true", type: "count"},
-                success: (res) => {
-                    $('#productsCount').text(res.count); // Update user count
-                    $(".updateTime").text(new Date().toLocaleTimeString()); // Update time
-                },
-                error: (err) => {
-                    $('#productsCount').text('Error While Fetching Data');
-                    $(".updateTime").text(new Date().toLocaleTimeString());
-                    console.log(err);
-                }
-            });
-
-        }
-
-        function getOrdersCount() {
-            $.ajax({
-                url: "purchase",
-                type: "GET",
-                data: {ajax: "true", type: "count"},
-                success: (res) => {
-                    $('#ordersCount').text(res.count); // Update user count
-                    $(".updateTime").text(new Date().toLocaleTimeString()); // Update time
-                },
-                error: (err) => {
-                    $('#ordersCount').text('Error While Fetching Data');
-                    $(".updateTime").text(new Date().toLocaleTimeString());
-                    console.log(err);
-                }
-            });
-
-        }
-
-        getUsersCount();
-        getProductsCount();
-        getOrdersCount();
-
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        function loadCategories() {
-            $.ajax({
-                url: "category",
-                type: "GET",
-                success: (res) => {
-                    $('#productCategory').empty()
-                    if (res.length === 0) {
-                        $('#productCategory').append(`<option disabled selected>No Categories Found</option>`)
-                        return;
+            function getUsersCount() {
+                $.ajax({
+                    url: "user",
+                    type: "GET",
+                    data: {ajax: "true", type: "count"},
+                    success: (res) => {
+                        $('#userCount').text(res.count); // Update user count
+                        $(".updateTime").text(new Date().toLocaleTimeString()); // Update time
+                    },
+                    error: (err) => {
+                        $('#userCount').text('Error While Fetching Data');
+                        $(".updateTime").text(new Date().toLocaleTimeString());
+                        console.log(err);
                     }
-                    res.forEach((category) => {
-                        $('#productCategory').append(`<option value="${category.id}">${category.name}</option>`);
-                    });
-                },
-                error: (err) => {
-                    $('#productCategory').empty()
-                    console.log(err);
-                }
-            });
-        }
-    });
-</script>
-<script src="../assets/js/AlertToast.js"></script>
+                });
+
+            }
+
+            function getProductsCount() {
+                $.ajax({
+                    url: "products",
+                    type: "GET",
+                    data: {ajax: "true", type: "count"},
+                    success: (res) => {
+                        $('#productsCount').text(res.count); // Update user count
+                        $(".updateTime").text(new Date().toLocaleTimeString()); // Update time
+                    },
+                    error: (err) => {
+                        $('#productsCount').text('Error While Fetching Data');
+                        $(".updateTime").text(new Date().toLocaleTimeString());
+                        console.log(err);
+                    }
+                });
+
+            }
+
+            function getOrdersCount() {
+                $.ajax({
+                    url: "purchase",
+                    type: "GET",
+                    data: {ajax: "true", type: "count"},
+                    success: (res) => {
+                        $('#ordersCount').text(res.count); // Update user count
+                        $(".updateTime").text(new Date().toLocaleTimeString()); // Update time
+                    },
+                    error: (err) => {
+                        $('#ordersCount').text('Error While Fetching Data');
+                        $(".updateTime").text(new Date().toLocaleTimeString());
+                        console.log(err);
+                    }
+                });
+
+            }
+
+            getUsersCount();
+            getProductsCount();
+            getOrdersCount();
+
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            function loadCategories() {
+                $.ajax({
+                    url: "category",
+                    type: "GET",
+                    dataType: "json",
+                    success: (res) => {
+                        $('#productCategory').empty()
+                        if (res.length === 0) {
+                            $('#productCategory').append(`<option disabled selected>No Categories Found</option>`)
+                            return;
+                        }
+                        $('#productCategory').append(`<option disabled selected>Select Category</option>`)
+
+                        res.data.forEach((cat) => {
+                            console.log(id, name);
+                            $('#productCategory').append(`<option value="${cat.id}">${cat.name}</option>`);
+                        });
+
+                    },
+                    error: (err) => {
+                        $('#productCategory').empty()
+                        console.log(err);
+                    }
+                });
+            }
+
+            // loadCategories();
+        });
+    </script>
+    <script src="../assets/js/AlertToast.js"></script>
 </body>
 </html>

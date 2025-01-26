@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import java.io.IOException;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class CategoryServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
+
         try {
             SessionFactory sessionFactory = (SessionFactory) req.getServletContext().getAttribute("sessionFactory");
             Session session = sessionFactory.openSession();
@@ -40,7 +41,10 @@ public class CategoryServlet extends HttpServlet {
                         .build()
                 );
             }
-            resp.getWriter().print(categoryBuilder.build());
+            JsonObjectBuilder response = Json.createObjectBuilder();
+            response.add("data", categoryBuilder);
+            resp.setContentType("application/json");
+            resp.getWriter().print(response.build());
         } catch (HibernateException e) {
             throw new RuntimeException(e);
         }

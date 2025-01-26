@@ -23,7 +23,7 @@
                     <li class="nav-item"><a class="nav-link" href="products">Products</a></li>
                     <li class="nav-item"><a class="nav-link" href="cart">Cart</a></li>
                     <li class="nav-item"><a class="nav-link" href="orders">Orders</a></li>
-<%--                    <li class="nav-item"><a class="nav-link" href="profile">Profile</a></li>--%>
+                    <%--                    <li class="nav-item"><a class="nav-link" href="profile">Profile</a></li>--%>
                     <li class="nav-item"><a class="nav-link text-bg-danger rounded" href="logout">Logout</a></li>
                 </ul>
             </div>
@@ -34,10 +34,11 @@
     String alert = request.getParameter("alert");
     if (alert != null) {
 %>
-<div class="toast position-absolute end-0 bottom-0" role="alert" aria-live="assertive" aria-atomic="true" >
+<div class="toast position-absolute end-0 bottom-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header">
         <img src="../assets/images/icon/alert.gif" class="rounded me-2" alt="alert">
-        <strong class="me-auto"><%=alert%></strong>
+        <strong class="me-auto"><%=alert%>
+        </strong>
         <small class="text-body-secondary">Just now</small>
         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
@@ -54,7 +55,8 @@
     if (user != null) {
 %>
 <div class="container text-center my-5">
-    <h5><%=user.getRole()%> : <%=user.getUserName()%></h5>
+    <h5><%=user.getRole()%> : <%=user.getUserName()%>
+    </h5>
     <h1>Welcome to the Kumudu Furniture</h1>
     <p>Browse, shop, and manage your orders with ease.</p>
 </div>
@@ -92,23 +94,30 @@
         <!-- Product Card -->
         <form class="col-md-4 mb-4" action="cart" method="post" style="max-width: 300px">
             <div class="card">
-                <img src="../<%=product.getImageUrl()%>" class="card-img-top object-fit-cover" alt="Product Image" style="max-height: 200px">
+                <img src="../<%=product.getImageUrl()%>" class="card-img-top object-fit-cover" alt="Product Image"
+                     style="max-height: 200px">
                 <div class="card-body">
-                    <h5 class="card-title"><%=product.getName()%></h5>
-                    <p class="card-text"><%=product.getDescription()%></p>
-                    <p class="card-text"><%=product.getPrice()%></p>
+                    <h5 class="card-title"><%=product.getName()%>
+                    </h5>
+                    <p class="card-text"><%=product.getDescription()%>
+                    </p>
+                    <p class="card-text"><%=product.getPrice()%>
+                    </p>
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text">Quantity</span>
                         <%
-                        if (product.getQuantity() == 0){
+                            if (product.getQuantity() == 0) {
                         %>
-                        <input type="number" name="qty" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="0" min="0" max="0" >
+                        <input type="number" name="qty" class="form-control" aria-label="Sizing example input"
+                               aria-describedby="inputGroup-sizing-sm" value="0" min="0" max="0">
                         <button type="button" class="btn btn-warning" disabled>No Stock Available</button>
                         <%
-                            }else{
+                        } else {
                         %>
-                        <input type="number" name="qty" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="1" min="1" max="<%=product.getQuantity()%>">
-                        <button type="submit" class="btn btn-success">Add to Cart</button>
+                        <input type="number" name="qty" class="form-control" aria-label="Sizing example input"
+                               aria-describedby="inputGroup-sizing-sm" value="1" min="1"
+                               max="<%=product.getQuantity()%>">
+                        <button type="submit" class="btn btn-success" name="action" value="post">Add to Cart</button>
                         <%
                             }
                         %>

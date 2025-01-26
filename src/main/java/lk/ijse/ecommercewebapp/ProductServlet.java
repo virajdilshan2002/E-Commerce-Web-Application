@@ -73,6 +73,13 @@ public class ProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
+            String action = req.getParameter("action");
+            if (action.equals("put")){
+                doPut(req, resp);
+            } else if (action.equals("delete")) {
+                doDelete(req, resp);
+            }
+
             String name = req.getParameter("name");
             String description = req.getParameter("description");
             String price = req.getParameter("price");
@@ -119,5 +126,15 @@ public class ProductServlet extends HttpServlet {
             resp.sendRedirect("admin.jsp?status=failed&alert=Product Not Saved!");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPut(req, resp);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doDelete(req, resp);
     }
 }
